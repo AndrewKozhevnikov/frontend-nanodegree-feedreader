@@ -9,12 +9,12 @@
  * to ensure they don't run until the DOM is ready.
  */
 $(function () {
-    describe('RSS Feeds', function () {
+    describe('RSS Feeds', () => {
         /**
          * Ensures that allFeeds is defined
          * And its length is not empty.
          */
-        it('are defined', function () {
+        it('are defined', () => {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
         });
@@ -23,7 +23,7 @@ $(function () {
          * Ensures that every feed object from allFeeds has an url.
          * And that the url is not empty.
          */
-        it('all urls are defined', function () {
+        it('all urls are defined', () => {
             allFeeds.forEach(f => {
                 expect(f.url).toBeDefined();
                 expect(f.url.length).not.toBe(0);
@@ -34,7 +34,7 @@ $(function () {
          * Ensures that every feed object from allFeeds has a name.
          * And that the name is not empty.
          */
-        it('all names are defined', function () {
+        it('all names are defined', () => {
             allFeeds.forEach(f => {
                 expect(f.name).toBeDefined();
                 expect(f.name.length).not.toBe(0);
@@ -42,14 +42,14 @@ $(function () {
         });
     });
 
-    describe('The menu', function () {
+    describe('The menu', () => {
         let menuIcon = $('.menu-icon-link');
         let body = $('body');
 
         /**
          * Ensures that the menu element is hidden by default.
          */
-        it('menu element is hidden by default', function () {
+        it('menu element is hidden by default', () => {
             expect(body.hasClass('menu-hidden')).toBe(true);
         });
 
@@ -59,7 +59,7 @@ $(function () {
          * 1. does the menu display when clicked
          * 2. and does it hide when clicked again.
          */
-        it('menu changes visibility when the menu icon is clicked', function () {
+        it('menu changes visibility when the menu icon is clicked', () => {
             menuIcon.click();
             expect(body.hasClass('menu-hidden')).toBe(false);
             menuIcon.click();
@@ -67,41 +67,39 @@ $(function () {
         });
     });
 
-    describe('Initial Entries', function () {
-        beforeEach(function (done) {
-            loadFeed(0, done);
-        });
+    describe('Initial Entries', () => {
+        beforeEach(done => loadFeed(0, done));
 
         /**
          * Ensures that when the #loadFeed(...) function completes its work,
-         * there is at least a single entry element within the .feed container.
+         * there is at least a single .entry element within the .feed container.
          */
-        it('there is at least a single feed entry', function (done) {
-            expect($('.feed').children().length).toBeGreaterThan(0);
+        it('there is at least a single feed entry', done => {
+            expect($('.feed .entry').length).toBeGreaterThan(0);
             done();
         });
     });
 
-    describe('New Feed Selection', function () {
+    describe('New Feed Selection', () => {
         let feed = $('.feed');
         let oldFeed;
         let newFeed;
 
-        beforeEach(function (done) {
+        beforeEach(done => {
             loadFeed(0, () => {
-                oldFeed = feed.children();
-                done();
-            });
-            loadFeed(1, () => {
-                newFeed = feed.children();
-                done();
+                oldFeed = feed.html();
+
+                loadFeed(1, () => {
+                    newFeed = feed.html();
+                    done();
+                });
             });
         });
 
         /**
          * Ensures that when a new feed is loaded that the content actually changes.
          */
-        it('the content actually changes on loadFeed', function (done) {
+        it('the content actually changes on loadFeed', done => {
             expect(oldFeed).not.toBe(newFeed);
             done();
         });
